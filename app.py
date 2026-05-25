@@ -104,12 +104,12 @@ st.markdown(
 st.sidebar.markdown("## 🛠️ Board Controls")
 st.sidebar.markdown("---")
 
-# 1. Tool Selection Matrix
+# 1. Tool Selection Matrix (Expanded with direct shape generation tools)
 drawing_mode = st.sidebar.selectbox(
     "Select Input / Writing Tool:",
-    ("freedraw", "line", "rect", "circle", "transform"),
+    ("freedraw", "line", "rect", "circle", "polygon", "transform"),
     index=0,
-    help="Use 'freedraw' to write with fingers, pens, or pencils. Use 'transform' to select, scale, move, or delete elements."
+    help="freedraw: Freehand lines. rect/circle/polygon: Automatically generate vector shapes on drag. transform: Select, resize, or delete elements."
 )
 
 st.sidebar.markdown("---")
@@ -129,27 +129,27 @@ st.sidebar.markdown("---")
 # 📐 GEOMETRIC LEARNING MODULE: 20 SHAPES REFERENCE MATRIX
 # =========================================================================
 st.sidebar.markdown("## 📐 Kids & Engineering Shape Library")
-st.sidebar.caption("Select a shape below to display structural properties and parameters for educational instruction:")
+st.sidebar.caption("Select a shape below to read its structural properties. Set your writing tool above to generate shapes on the board:")
 
 # Structured mapping array containing exactly 20 essential geometric shapes
 shape_library = {
-    "1. Triangle (Equilateral)": "🔺 3 equal sides and 3 equal 60° internal angles. Perfect baseline shape for teaching basic symmetry.",
-    "2. Right Triangle": "📐 3 sides, featuring exactly one 90° right angle. Essential for introducing size scales, heights, and engineering trigonometry.",
-    "3. Square": "⏹️ 4 equal straight sides and 4 perfect 90° right angles. The ideal standard metric shape for early learners.",
-    "4. Rectangle": "▱ 4 sides where opposite sides are equal lengths, and all corners are 90° angles. Great for discussing width vs height.",
-    "5. Circle": "⚪ A perfectly round loop with 0 sides and 0 corners. Every boundary point sits an equal distance from the absolute center.",
-    "6. Oval / Ellipse": "🥚 An elongated, smooth curving egg shape with two distinct focal geometric center points.",
+    "1. Triangle (Equilateral)": "🔺 3 equal sides and 3 equal 60° internal angles. Use 'polygon' or 'line' tool to plot your points.",
+    "2. Right Triangle": "📐 3 sides, featuring exactly one 90° right angle. Essential for building construction layouts.",
+    "3. Square": "⏹️ 4 equal straight sides and 4 perfect 90° right angles. Use the 'rect' tool to draw perfectly symmetrical boxes.",
+    "4. Rectangle": "▱ 4 sides where opposite sides are equal lengths. Use the 'rect' tool to stretch out width vs height ratios.",
+    "5. Circle": "⚪ A perfectly round loop with 0 corners. Use the 'circle' tool to automatically expand from a central point.",
+    "6. Oval / Ellipse": "🥚 An elongated, smooth curving egg shape with two distinct focal geometric axes.",
     "7. Semicircle": "🌗 Exactly half of a circle, composed of a flat straight diameter baseline line and a curved top arc.",
-    "8. Pentagon": "⬟ A 5-sided polygon with 5 interior angles adding up to 540°. Think of a drawing of a classic house structure.",
-    "9. Hexagon": "⬢ A 6-sided polygon. This shape is incredibly common in engineering structures and natural beehive cells.",
-    "10. Heptagon": "⬦ A 7-sided polygon. An advanced geometry challenge showing how interior angles expand to 900°.",
+    "8. Pentagon": "⬟ A 5-sided polygon with 5 interior angles adding up to 540°. Set tool to 'polygon' to link 5 joints.",
+    "9. Hexagon": "⬢ A 6-sided polygon. This shape is incredibly common in engineering honeycomb structures.",
+    "10. Heptagon": "⬦ A 7-sided polygon. An advanced geometry framework showing how interior angles expand to 900°.",
     "11. Octagon": "🛑 An 8-sided geometric polygon. Instantly recognizable to children as the universal shape of a stop sign.",
     "12. Nonagon": "🔶 A 9-sided polygon containing 9 individual corner angles summing to exactly 1260°.",
     "13. Decagon": "🌟 A 10-sided polygon. Ideal for teaching structural decimal groupings to young mathematics students.",
     "14. Parallelogram": "💎 A 4-sided flat quadrilateral where the opposite sides are completely parallel to each other.",
     "15. Trapezoid": "📐 A 4-sided shape possessing only one single pair of parallel horizontal lines.",
     "16. Rhombus / Diamond": "♦️ A 4-sided diamond shape where all 4 edges are identical lengths, but corners are skewed.",
-    "17. Crescent": "🌙 A distinct curved crescent silhouette formed by a circular shape being overlapped by another curve.",
+    "17. Crescent": "🌙 A distinct curved crescent silhouette formed by a circular shape being intersected by another curve.",
     "18. Star (5-Pointed)": "⭐ A beautiful 10-sided star shape built out of alternating interior and exterior acute angles.",
     "19. Heart": "❤️ A symmetrical, recognizable decorative shape containing two round upper lobes meeting at a sharp bottom corner point.",
     "20. Cube Structure": "📦 A 3D dimensional presentation displaying 6 identical square flat faces, 12 edges, and 8 corner vertices."
@@ -163,7 +163,7 @@ st.sidebar.info(shape_library[selected_shape])
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 💡 Quick User Guide:")
 st.sidebar.info(
-    "👉 **To Write/Draw:** Set tool to **'freedraw'** or use shape outlines like **'rect'**, **'circle'**, or **'line'** to illustrate geometry parameters on the board surface.\n\n"
+    "👉 **To Automatically Generate Shapes:** Change the tool above to **'rect'** for rectangles/squares, **'circle'** for circles, or **'polygon'** for multi-sided items like triangles.\n\n"
     "👉 **To Erase/Delete:** Switch tool to **'transform'**. Click on any specific element you drew to highlight it, then press the **Delete or Backspace** key on your keyboard to wipe it cleanly!"
 )
 
@@ -180,7 +180,7 @@ with canvas_col:
     
     # Drawing Canvas Initialization Matrix
     canvas_result = st_canvas(
-        fill_color="rgba(255, 255, 255, 0.0)",  # Keep interior shapes hollow/transparent
+        fill_color="rgba(255, 255, 255, 0.0)",  # Keep interior shapes hollow/transparent for blueprint looks
         stroke_width=stroke_width,
         stroke_color=stroke_color,
         background_color=bg_color,
