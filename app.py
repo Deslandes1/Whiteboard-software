@@ -134,8 +134,22 @@ st.sidebar.markdown("---")
 # 2. Advanced Multi-Color Palette Selection Matrix
 stroke_color = st.sidebar.color_picker("🎨 Select Pen / Pencil Color:", "#34d399")
 
-# 3. Dynamic Board Background Color Configurations
-bg_color = st.sidebar.color_picker("🧱 Select Board Background Color:", "#111827")
+# 3. Dynamic Board Background Color Selection Menu (As Requested)
+board_color_name = st.sidebar.selectbox(
+    "🧱 Select Board Surface Color:",
+    ("Black (Default)", "White Blueprint", "Classic Green Board", "Deep Engineering Blue", "Studio Charcoal Grey"),
+    index=0
+)
+
+# Hexadecimal hex value routing map
+color_map = {
+    "Black (Default)": "#000000",
+    "White Blueprint": "#ffffff",
+    "Classic Green Board": "#064e3b",
+    "Deep Engineering Blue": "#1e3a8a",
+    "Studio Charcoal Grey": "#334155"
+}
+bg_color = color_map[board_color_name]
 
 # 4. Thickness Calibration Slider Node
 stroke_width = st.sidebar.slider("✏️ Line / Stroke Thickness:", min_value=1, max_value=40, value=5)
@@ -195,7 +209,7 @@ with canvas_col:
         unsafe_allow_html=True
     )
     
-    # Canvas box returned back to a stable standard resolution aspect ratio (1000x500)
+    # Canvas box with locked toolbar to preserve structural delete features permanently
     canvas_result = st_canvas(
         fill_color="rgba(255, 255, 255, 0.0)",  
         stroke_width=stroke_width,
@@ -204,7 +218,7 @@ with canvas_col:
         height=500,
         width=1000,
         drawing_mode=drawing_mode,
-        display_toolbar=True, 
+        display_toolbar=True, # LOCKED AS TRUE: Never removes the delete/trash functionality under the board
         key="global_board_engine",
     )
 
