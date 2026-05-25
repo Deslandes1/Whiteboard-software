@@ -9,10 +9,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Custom CSS Injection for GlobalInternet.py Dark Theme Isolation
+# 2. Custom CSS Injection for GlobalInternet.py Dark Theme & High-Contrast White Text
 st.markdown(
     """
     <style>
+    /* Global App Background and Base Contrast */
     .stApp {
         background-color: #0f172a;
         color: #f8fafc;
@@ -39,6 +40,33 @@ st.markdown(
     }
     .reportview-container .main .block-container {
         padding-top: 2rem;
+    }
+    
+    /* Strong White Metric Text Overrides */
+    div[data-testid="stMetricLabel"] > div {
+        color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+    div[data-testid="stMetricValue"] > div {
+        color: #ffffff !important;
+        font-weight: 800 !important;
+    }
+    
+    /* High-Contrast Custom Classes */
+    .strong-white-caption {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        font-size: 0.875rem;
+        margin-top: 4px;
+    }
+    .strong-white-footer {
+        text-align: center; 
+        margin-top: 40px; 
+        font-size: 0.85rem; 
+        color: #ffffff !important; 
+        font-weight: 600 !important;
+        border-top: 1px solid #334155; 
+        padding-top: 15px;
     }
     </style>
     """,
@@ -91,7 +119,7 @@ st.sidebar.info(
 canvas_col, metric_col = st.columns([5, 1])
 
 with canvas_col:
-    # Drawing Canvas Initialization Matrix (Fixed TypeError attributes)
+    # Drawing Canvas Initialization Matrix
     canvas_result = st_canvas(
         fill_color="rgba(255, 255, 255, 0.0)",  # Keep interior shapes hollow/transparent
         stroke_width=stroke_width,
@@ -108,20 +136,24 @@ with metric_col:
     if canvas_result.json_data is not None:
         # Pull dynamic canvas elements length directly from underlying JSON engine matrix
         elements_count = len(canvas_result.json_data["objects"])
-        st.metric(label="Active Elements", value=elements_count)
+        
+        # Displays "Active Elements" and the raw count string in pure high-contrast bold white
+        st.metric(label="Active Elements", value=str(elements_count))
         
         if elements_count > 0:
             st.success("Board Engine Active.")
-            st.caption("Use the toolbar icons below the board to quickly undo strokes or wipe the panel clear.")
+            st.markdown('<p class="strong-white-caption">Use the toolbar icons below the board to quickly undo strokes or wipe the panel clear.</p>', unsafe_allow_html=True)
         else:
-            st.caption("Board is clear. Awaiting input stream...")
+            # Displays "Board is clear. Awaiting input stream..." in strong bold white HTML formatting
+            st.markdown('<p class="strong-white-caption">Board is clear. Awaiting input stream...</p>', unsafe_allow_html=True)
 
 # =========================================================================
 # 📜 SYSTEM FOOTER BASE NODE
 # =========================================================================
+# Displays copyright information in pure bold white text layout passing through CSS isolation classes
 st.markdown(
     """
-    <div style="text-align: center; margin-top: 40px; font-size: 0.85rem; color: #475569; border-top: 1px solid #1e293b; padding-top: 15px;">
+    <div class="strong-white-footer">
         © 2026 GLOBALINTERNET.PY | Global Software Architectures & Technology Innovation.
     </div>
     """,
