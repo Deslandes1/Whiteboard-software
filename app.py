@@ -1,6 +1,5 @@
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
-import pandas as pd
 import io
 
 # 1. Page Configuration Framework
@@ -11,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Custom CSS Injection for GlobalInternet.py Dark Theme & Full-Width Overrides
+# 2. Custom CSS Injection for GlobalInternet.py Dark Theme & Canvas Scale Force
 st.markdown(
     """
     <style>
@@ -57,6 +56,15 @@ st.markdown(
         padding-top: 1.5rem !important;
         padding-bottom: 1rem !important;
         max-width: 98% !important;
+    }
+
+    /* FORCE THE DRAWING CANVAS CONTAINER TO STRETCH AND FILL FILL WORKSPACE */
+    div[data-testid="stCanvas"] {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    div[data-testid="stCanvas"] > div {
+        margin: 0 auto !important;
     }
     
     /* Strong White Metric Text Overrides */
@@ -135,9 +143,8 @@ st.sidebar.markdown("---")
 # 📐 GEOMETRIC LEARNING MODULE: 20 SHAPES REFERENCE MATRIX
 # =========================================================================
 st.sidebar.markdown("## 📐 Kids & Engineering Shape Library")
-st.sidebar.caption("Select a shape below to read its structural properties. Set your writing tool above to generate shapes on the board:")
+st.sidebar.caption("Select a shape below to read its structural properties:")
 
-# Structured mapping array containing exactly 20 essential geometric shapes
 shape_library = {
     "1. Triangle (Equilateral)": "🔺 3 equal sides and 3 equal 60° internal angles. Use 'polygon' or 'line' tool to plot your points.",
     "2. Right Triangle": "📐 3 sides, featuring exactly one 90° right angle. Essential for building construction layouts.",
@@ -162,8 +169,6 @@ shape_library = {
 }
 
 selected_shape = st.sidebar.selectbox("Choose Shape Template:", list(shape_library.keys()))
-
-# Interactive blueprint details box for instructional delivery
 st.sidebar.info(shape_library[selected_shape])
 
 st.sidebar.markdown("---")
@@ -174,23 +179,23 @@ st.sidebar.info(
 )
 
 # =========================================================================
-# 🎨 CENTRAL INTERACTIVE BOARD CANVAS LAYER (WIDE GRID OPTIMIZATION)
+# 🎨 CENTRAL INTERACTIVE BOARD CANVAS LAYER (ENLARGED CANVAS BASE)
 # =========================================================================
 
-# High-width ratio configuration fills the entire dead whitespace space completely
-canvas_col, metric_col = st.columns([12, 2])
+# Optimized column width to match the massive canvas width parameters
+canvas_col, metric_col = st.columns([14, 2])
 
 with canvas_col:
     st.markdown(f"### ✏️ Current Lesson Target: **{selected_shape}**")
     
-    # Expanded width (1150px) to comfortably expand across standard monitors
+    # ENLARGED CANVAS DIMENSIONS: Shifting to 1400px Wide by 650px High
     canvas_result = st_canvas(
         fill_color="rgba(255, 255, 255, 0.0)",  
         stroke_width=stroke_width,
         stroke_color=stroke_color,
         background_color=bg_color,
-        height=550,
-        width=1150,
+        height=650,
+        width=1400,
         drawing_mode=drawing_mode,
         display_toolbar=True, 
         key="global_board_engine",
@@ -202,37 +207,32 @@ with metric_col:
         elements_count = len(canvas_result.json_data["objects"])
         st.metric(label="Active Elements", value=str(elements_count))
         
-        # =================================================================
-        # 📥 REAL HARDWARE DOWNLOAD ROUTINE MODULE
-        # =================================================================
+        # Real Hardwired Download Module
         if canvas_result.image_data is not None:
             st.markdown("---")
             st.markdown("##### 💾 Save Blueprint")
             
-            # Extract image byte stream array from the frontend element canvas
             img_data = canvas_result.image_data
-            
             try:
                 from PIL import Image
-                # Convert canvas data into a valid downloadable PNG byte package
                 image_pil = Image.fromarray(img_data.astype('uint8'), 'RGBA')
                 buffer = io.BytesIO()
                 image_pil.save(buffer, format="PNG")
                 byte_payload = buffer.getvalue()
                 
                 st.download_button(
-                    label="📥 Save Artwork (PNG)",
+                    label="📥 Save Drawing",
                     data=byte_payload,
                     file_name="globalinternet_board_export.png",
                     mime="image/png",
                     use_container_width=True
                 )
             except Exception:
-                st.caption("Awaiting drawing stream array to encode download container...")
+                st.caption("Encoding drawing data...")
         
         st.markdown("---")
         if elements_count > 0:
-            st.success("Board Engine Live.")
+            st.success("Board Active.")
         else:
             st.markdown('<p class="strong-white-caption">Awaiting input stream layers...</p>', unsafe_allow_html=True)
 
