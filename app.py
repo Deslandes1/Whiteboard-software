@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Custom CSS Injection for GlobalInternet.py Dark Theme & Canvas Scale Force
+# 2. Custom CSS Injection for GlobalInternet.py Dark Theme & Layout Control
 st.markdown(
     """
     <style>
@@ -55,16 +55,12 @@ st.markdown(
     .block-container {
         padding-top: 1.5rem !important;
         padding-bottom: 1rem !important;
-        max-width: 98% !important;
+        max-width: 95% !important;
     }
 
-    /* FORCE THE DRAWING CANVAS CONTAINER TO STRETCH AND FILL FILL WORKSPACE */
+    /* Keep canvas neat and centered */
     div[data-testid="stCanvas"] {
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-    div[data-testid="stCanvas"] > div {
-        margin: 0 auto !important;
+        margin-bottom: 15px !important;
     }
     
     /* Strong White Metric Text Overrides */
@@ -83,6 +79,13 @@ st.markdown(
         font-weight: 600 !important;
         font-size: 0.875rem;
         margin-top: 4px;
+    }
+    .instruction-card {
+        background-color: #1e293b;
+        border-left: 4px solid #38bdf8;
+        padding: 12px;
+        border-radius: 4px;
+        margin-bottom: 15px;
     }
     .strong-white-footer {
         text-align: center; 
@@ -123,7 +126,7 @@ drawing_mode = st.sidebar.selectbox(
     "Select Input / Writing Tool:",
     ("freedraw", "line", "rect", "circle", "polygon", "transform"),
     index=0,
-    help="freedraw: Freehand lines. rect/circle/polygon: Automatically generate vector shapes on drag. transform: Select, resize, or delete elements."
+    help="freedraw: Freehand lines. rect/circle/polygon: Automatically generate vector shapes on drag. transform: Select, resize, scale up, or delete elements."
 )
 
 st.sidebar.markdown("---")
@@ -171,31 +174,35 @@ shape_library = {
 selected_shape = st.sidebar.selectbox("Choose Shape Template:", list(shape_library.keys()))
 st.sidebar.info(shape_library[selected_shape])
 
-st.sidebar.markdown("---")
-st.sidebar.markdown("### 💡 Quick User Guide:")
-st.sidebar.info(
-    "👉 **To Automatically Generate Shapes:** Change the tool above to **'rect'** for rectangles/squares, **'circle'** for circles, or **'polygon'** for multi-sided items like triangles.\n\n"
-    "👉 **To Erase/Delete:** Switch tool to **'transform'**. Click on any specific element you drew to highlight it, then press the **Delete or Backspace** key on your keyboard to wipe it cleanly!"
-)
-
 # =========================================================================
-# 🎨 CENTRAL INTERACTIVE BOARD CANVAS LAYER (ENLARGED CANVAS BASE)
+# 🎨 CENTRAL INTERACTIVE BOARD CANVAS LAYER
 # =========================================================================
 
-# Optimized column width to match the massive canvas width parameters
-canvas_col, metric_col = st.columns([14, 2])
+canvas_col, metric_col = st.columns([5, 1])
 
 with canvas_col:
     st.markdown(f"### ✏️ Current Lesson Target: **{selected_shape}**")
     
-    # ENLARGED CANVAS DIMENSIONS: Shifting to 1400px Wide by 650px High
+    # Practical Scaling Guide Display Box
+    st.markdown(
+        """
+        <div class="instruction-card">
+            ⚡ <strong>How to Enlarge Your Drawing:</strong> Switch your tool in the sidebar to 
+            <strong>'transform'</strong>. Click directly on the shape or line you drew to highlight it. 
+            Drag any of the square corner points outward to scale up your shape to fill the whole board!
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
+    
+    # Canvas box returned back to a stable standard resolution aspect ratio (1000x500)
     canvas_result = st_canvas(
         fill_color="rgba(255, 255, 255, 0.0)",  
         stroke_width=stroke_width,
         stroke_color=stroke_color,
         background_color=bg_color,
-        height=650,
-        width=1400,
+        height=500,
+        width=1000,
         drawing_mode=drawing_mode,
         display_toolbar=True, 
         key="global_board_engine",
