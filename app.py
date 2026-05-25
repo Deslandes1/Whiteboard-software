@@ -32,7 +32,18 @@ st.markdown(
         text-align: center;
         font-size: 1rem;
         color: #94a3b8;
+        margin-bottom: 4px;
+    }
+    .author-credentials {
+        text-align: center;
+        font-size: 0.95rem;
+        color: #e2e8f0;
+        font-weight: 500;
         margin-bottom: 25px;
+    }
+    .author-credentials a {
+        color: #38bdf8 !important;
+        text-decoration: none;
     }
     div[data-testid="stSidebar"] {
         background-color: #1e293b !important;
@@ -76,6 +87,16 @@ st.markdown(
 # App UI Header Nodes
 st.markdown('<h1 class="main-title">THE BOARD SOFTWARE</h1>', unsafe_allow_html=True)
 st.markdown('<h3 class="sub-title">Engineered by GlobalInternet.py | Advanced Multi-Touch & Stylus Canvas Core</h3>', unsafe_allow_html=True)
+
+# Personal Information Metadata Injection Layer
+st.markdown(
+    '<div class="author-credentials">'
+    'Built by <strong>Gesner Deslandes</strong> &nbsp;|&nbsp; '
+    '📥 Phone: <strong>(509)-47385663</strong> &nbsp;|&nbsp; '
+    '✉️ Email: <a href="mailto:deslandes78@gmail.com"><strong>deslandes78@gmail.com</strong></a>'
+    '</div>', 
+    unsafe_allow_html=True
+)
 
 # =========================================================================
 # 🎛️ SIDEBAR CONTROL FRAMEWORK
@@ -150,7 +171,6 @@ with metric_col:
 # =========================================================================
 # 📜 SYSTEM FOOTER BASE NODE
 # =========================================================================
-# Displays copyright information in pure bold white text layout passing through CSS isolation classes
 st.markdown(
     """
     <div class="strong-white-footer">
