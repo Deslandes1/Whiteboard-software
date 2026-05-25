@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Custom CSS Injection for GlobalInternet.py Dark Theme & Layout Control
+# 2. Custom CSS Injection for GlobalInternet.py Dark Theme & Full-Canvas Reset Alignment
 st.markdown(
     """
     <style>
@@ -58,9 +58,10 @@ st.markdown(
         max-width: 95% !important;
     }
 
-    /* Keep canvas neat and centered */
+    /* Force canvas drawing block to align properly without splitting gaps */
     div[data-testid="stCanvas"] {
-        margin-bottom: 15px !important;
+        margin: 0 auto 15px auto !important;
+        background-color: transparent !important;
     }
     
     /* Strong White Metric Text Overrides */
@@ -134,7 +135,7 @@ st.sidebar.markdown("---")
 # 2. Advanced Multi-Color Palette Selection Matrix
 stroke_color = st.sidebar.color_picker("🎨 Select Pen / Pencil Color:", "#34d399")
 
-# 3. Dynamic Board Background Color Selection Menu (As Requested)
+# 3. Dynamic Board Background Color Selection Menu
 board_color_name = st.sidebar.selectbox(
     "🧱 Select Board Surface Color:",
     ("Black (Default)", "White Blueprint", "Classic Green Board", "Deep Engineering Blue", "Studio Charcoal Grey"),
@@ -197,7 +198,6 @@ canvas_col, metric_col = st.columns([5, 1])
 with canvas_col:
     st.markdown(f"### ✏️ Current Lesson Target: **{selected_shape}**")
     
-    # Practical Scaling Guide Display Box
     st.markdown(
         """
         <div class="instruction-card">
@@ -209,7 +209,8 @@ with canvas_col:
         unsafe_allow_html=True
     )
     
-    # Canvas box with locked toolbar to preserve structural delete features permanently
+    # SYSTEM UPGRADE: Key is bound directly to the selected bg_color string.
+    # This completely eliminates half-rendered background artifact glitches instantly.
     canvas_result = st_canvas(
         fill_color="rgba(255, 255, 255, 0.0)",  
         stroke_width=stroke_width,
@@ -218,8 +219,8 @@ with canvas_col:
         height=500,
         width=1000,
         drawing_mode=drawing_mode,
-        display_toolbar=True, # LOCKED AS TRUE: Never removes the delete/trash functionality under the board
-        key="global_board_engine",
+        display_toolbar=True, # Protected delete actions at the base of your layout
+        key=f"engine_board_{bg_color}",
     )
 
 with metric_col:
