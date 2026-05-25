@@ -1,5 +1,7 @@
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
+import pandas as pd
+import io
 
 # 1. Page Configuration Framework
 st.set_page_config(
@@ -9,7 +11,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 2. Custom CSS Injection for GlobalInternet.py Dark Theme & High-Contrast White Text
+# 2. Custom CSS Injection for GlobalInternet.py Dark Theme & Full-Width Overrides
 st.markdown(
     """
     <style>
@@ -49,8 +51,12 @@ st.markdown(
         background-color: #1e293b !important;
         border-right: 1px solid #334155;
     }
-    .reportview-container .main .block-container {
-        padding-top: 2rem;
+    
+    /* Maximize main block utilization space */
+    .block-container {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1rem !important;
+        max-width: 98% !important;
     }
     
     /* Strong White Metric Text Overrides */
@@ -104,7 +110,7 @@ st.markdown(
 st.sidebar.markdown("## 🛠️ Board Controls")
 st.sidebar.markdown("---")
 
-# 1. Tool Selection Matrix (Expanded with direct shape generation tools)
+# 1. Tool Selection Matrix 
 drawing_mode = st.sidebar.selectbox(
     "Select Input / Writing Tool:",
     ("freedraw", "line", "rect", "circle", "polygon", "transform"),
@@ -142,7 +148,7 @@ shape_library = {
     "7. Semicircle": "🌗 Exactly half of a circle, composed of a flat straight diameter baseline line and a curved top arc.",
     "8. Pentagon": "⬟ A 5-sided polygon with 5 interior angles adding up to 540°. Set tool to 'polygon' to link 5 joints.",
     "9. Hexagon": "⬢ A 6-sided polygon. This shape is incredibly common in engineering honeycomb structures.",
-    "10. Heptagon": "⬦ A 7-sided polygon. An advanced geometry framework showing how interior angles expand to 900°.",
+    "10. Heptagon": "⦾ A 7-sided polygon. An advanced geometry framework showing how interior angles expand to 900°.",
     "11. Octagon": "🛑 An 8-sided geometric polygon. Instantly recognizable to children as the universal shape of a stop sign.",
     "12. Nonagon": "🔶 A 9-sided polygon containing 9 individual corner angles summing to exactly 1260°.",
     "13. Decagon": "🌟 A 10-sided polygon. Ideal for teaching structural decimal groupings to young mathematics students.",
@@ -168,43 +174,67 @@ st.sidebar.info(
 )
 
 # =========================================================================
-# 🎨 CENTRAL INTERACTIVE BOARD CANVAS LAYER
+# 🎨 CENTRAL INTERACTIVE BOARD CANVAS LAYER (WIDE GRID OPTIMIZATION)
 # =========================================================================
 
-# Responsive structural columns layout
-canvas_col, metric_col = st.columns([5, 1])
+# High-width ratio configuration fills the entire dead whitespace space completely
+canvas_col, metric_col = st.columns([12, 2])
 
 with canvas_col:
-    # Display the targeted instruction header based on active drop-down selection
     st.markdown(f"### ✏️ Current Lesson Target: **{selected_shape}**")
     
-    # Drawing Canvas Initialization Matrix
+    # Expanded width (1150px) to comfortably expand across standard monitors
     canvas_result = st_canvas(
-        fill_color="rgba(255, 255, 255, 0.0)",  # Keep interior shapes hollow/transparent for blueprint looks
+        fill_color="rgba(255, 255, 255, 0.0)",  
         stroke_width=stroke_width,
         stroke_color=stroke_color,
         background_color=bg_color,
         height=550,
+        width=1150,
         drawing_mode=drawing_mode,
-        display_toolbar=True, # Provides built-in Undo/Redo/Trash actions at canvas base
+        display_toolbar=True, 
         key="global_board_engine",
     )
 
 with metric_col:
-    st.markdown("#### 📊 Board Data")
+    st.markdown("#### 📊 Board Matrix")
     if canvas_result.json_data is not None:
-        # Pull dynamic canvas elements length directly from underlying JSON engine matrix
         elements_count = len(canvas_result.json_data["objects"])
-        
-        # Displays "Active Elements" and the raw count string in pure high-contrast bold white
         st.metric(label="Active Elements", value=str(elements_count))
         
+        # =================================================================
+        # 📥 REAL HARDWARE DOWNLOAD ROUTINE MODULE
+        # =================================================================
+        if canvas_result.image_data is not None:
+            st.markdown("---")
+            st.markdown("##### 💾 Save Blueprint")
+            
+            # Extract image byte stream array from the frontend element canvas
+            img_data = canvas_result.image_data
+            
+            try:
+                from PIL import Image
+                # Convert canvas data into a valid downloadable PNG byte package
+                image_pil = Image.fromarray(img_data.astype('uint8'), 'RGBA')
+                buffer = io.BytesIO()
+                image_pil.save(buffer, format="PNG")
+                byte_payload = buffer.getvalue()
+                
+                st.download_button(
+                    label="📥 Save Artwork (PNG)",
+                    data=byte_payload,
+                    file_name="globalinternet_board_export.png",
+                    mime="image/png",
+                    use_container_width=True
+                )
+            except Exception:
+                st.caption("Awaiting drawing stream array to encode download container...")
+        
+        st.markdown("---")
         if elements_count > 0:
-            st.success("Board Engine Active.")
-            st.markdown('<p class="strong-white-caption">Use the toolbar icons below the board to quickly undo strokes or wipe the panel clear.</p>', unsafe_allow_html=True)
+            st.success("Board Engine Live.")
         else:
-            # Displays "Board is clear. Awaiting input stream..." in strong bold white HTML formatting
-            st.markdown('<p class="strong-white-caption">Board is clear. Awaiting input stream...</p>', unsafe_allow_html=True)
+            st.markdown('<p class="strong-white-caption">Awaiting input stream layers...</p>', unsafe_allow_html=True)
 
 # =========================================================================
 # 📜 SYSTEM FOOTER BASE NODE
