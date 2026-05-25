@@ -91,16 +91,15 @@ st.sidebar.info(
 canvas_col, metric_col = st.columns([5, 1])
 
 with canvas_col:
-    # Drawing Canvas Initialization Matrix
+    # Drawing Canvas Initialization Matrix (Fixed TypeError attributes)
     canvas_result = st_canvas(
         fill_color="rgba(255, 255, 255, 0.0)",  # Keep interior shapes hollow/transparent
         stroke_width=stroke_width,
         stroke_color=stroke_color,
         background_color=bg_color,
-        update_穩定=True,
         height=550,
         drawing_mode=drawing_mode,
-        display_toolbar=True, # Built-in redundancy panel (undo, redo, clear all)
+        display_toolbar=True, # Provides built-in Undo/Redo/Trash actions at canvas base
         key="global_board_engine",
     )
 
@@ -113,9 +112,7 @@ with metric_col:
         
         if elements_count > 0:
             st.success("Board Engine Active.")
-            if st.button("🗑️ Clear Entire Board"):
-                # Simple diagnostic indicator trigger
-                st.info("Use the trash bin icon at the bottom of the canvas layer to completely wipe the current canvas context.")
+            st.caption("Use the toolbar icons below the board to quickly undo strokes or wipe the panel clear.")
         else:
             st.caption("Board is clear. Awaiting input stream...")
 
