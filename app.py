@@ -122,7 +122,7 @@ st.markdown(
 st.sidebar.markdown("## 🛠️ Board Controls")
 st.sidebar.markdown("---")
 
-# 1. Tool Selection Matrix (NOW INCLUDES 'text' ENGINE OPTION)
+# 1. Tool Selection Matrix
 drawing_mode = st.sidebar.selectbox(
     "Select Input / Writing Tool:",
     ("freedraw", "line", "rect", "circle", "polygon", "text", "transform"),
@@ -208,7 +208,7 @@ with canvas_col:
         unsafe_allow_html=True
     )
     
-    # Executing complete full-coverage canvas core configuration layer
+    # ERROR FIX: Cleaned unexpected text tokens out of st_canvas arguments
     canvas_result = st_canvas(
         fill_color="rgba(255, 255, 255, 0.0)",  
         stroke_width=stroke_width,
@@ -218,7 +218,7 @@ with canvas_col:
         width=1000,
         drawing_mode=drawing_mode,
         display_toolbar=True, 
-        key=f"engine_board_{bg_color}",
+        key=f"engine_board_{bg_color}"
     )
 
 with metric_col:
