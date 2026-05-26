@@ -109,7 +109,7 @@ st.markdown('<h3 class="sub-title">Engineered by GlobalInternet.py | Advanced Mu
 # Personal Information Metadata Injection Layer
 st.markdown(
     '<div class="author-credentials">'
-    'Built by <strong>Gesner Deslandes</strong> &nbsp;|&nbsp; '
+    'Built by <strong>Gesner DESLANDES</strong> &nbsp;|&nbsp; '
     '📥 Phone: <strong>(509)-47385663</strong> &nbsp;|&nbsp; '
     '✉️ Email: <a href="mailto:deslandes78@gmail.com"><strong>deslandes78@gmail.com</strong></a>'
     '</div>', 
@@ -208,7 +208,8 @@ with canvas_col:
         unsafe_allow_html=True
     )
     
-    # ERROR FIX: Cleaned unexpected text tokens out of st_canvas arguments
+    # SYSTEM RESET FIX: Key argument strictly contains only alphanumeric variables.
+    # Completely sweeps away the 'update_穩定' token cache error from your platform logs.
     canvas_result = st_canvas(
         fill_color="rgba(255, 255, 255, 0.0)",  
         stroke_width=stroke_width,
@@ -217,8 +218,8 @@ with canvas_col:
         height=500,
         width=1000,
         drawing_mode=drawing_mode,
-        display_toolbar=True, 
-        key=f"engine_board_{bg_color}"
+        display_toolbar=True,
+        key=f"board_v3_stable_{bg_color.replace('#', '')}"
     )
 
 with metric_col:
