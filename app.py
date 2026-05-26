@@ -122,18 +122,18 @@ st.markdown(
 st.sidebar.markdown("## 🛠️ Board Controls")
 st.sidebar.markdown("---")
 
-# 1. Tool Selection Matrix 
+# 1. Tool Selection Matrix (NOW INCLUDES 'text' ENGINE OPTION)
 drawing_mode = st.sidebar.selectbox(
     "Select Input / Writing Tool:",
-    ("freedraw", "line", "rect", "circle", "polygon", "transform"),
+    ("freedraw", "line", "rect", "circle", "polygon", "text", "transform"),
     index=0,
-    help="freedraw: Freehand lines. rect/circle/polygon: Automatically generate vector shapes on drag. transform: Select, resize, scale up, or delete elements."
+    help="freedraw: Draw lines. text: Click on board to type with keyboard. transform: Scale or reposition text/shapes."
 )
 
 st.sidebar.markdown("---")
 
 # 2. Advanced Multi-Color Palette Selection Matrix
-stroke_color = st.sidebar.color_picker("🎨 Select Pen / Pencil Color:", "#34d399")
+stroke_color = st.sidebar.color_picker("🎨 Select Pen / Text Color:", "#34d399")
 
 # 3. Dynamic Board Background Color Selection Menu
 board_color_name = st.sidebar.selectbox(
@@ -142,7 +142,6 @@ board_color_name = st.sidebar.selectbox(
     index=0
 )
 
-# Hexadecimal hex value routing map
 color_map = {
     "Black (Default)": "#000000",
     "White Blueprint": "#ffffff",
@@ -152,8 +151,8 @@ color_map = {
 }
 bg_color = color_map[board_color_name]
 
-# 4. Thickness Calibration Slider Node
-stroke_width = st.sidebar.slider("✏️ Line / Stroke Thickness:", min_value=1, max_value=40, value=5)
+# 4. Thickness & Font Sizing Calibration Slider Node
+stroke_width = st.sidebar.slider("✏️ Stroke Thickness / Font Size:", min_value=1, max_value=60, value=18)
 
 st.sidebar.markdown("---")
 
@@ -201,16 +200,15 @@ with canvas_col:
     st.markdown(
         """
         <div class="instruction-card">
-            ⚡ <strong>How to Enlarge Your Drawing:</strong> Switch your tool in the sidebar to 
-            <strong>'transform'</strong>. Click directly on the shape or line you drew to highlight it. 
-            Drag any of the square corner points outward to scale up your shape to fill the whole board!
+            ⌨️ <strong>How to Use Keyboard Typing:</strong> Set your writing tool tool in the sidebar to 
+            <strong>'text'</strong>. Click anywhere on the board surface, and a blinking cursor will appear. 
+            Type your labels directly from your physical keyboard! Use <strong>'transform'</strong> to resize or reposition them later.
         </div>
         """, 
         unsafe_allow_html=True
     )
     
-    # SYSTEM UPGRADE: Key is bound directly to the selected bg_color string.
-    # This completely eliminates half-rendered background artifact glitches instantly.
+    # Executing complete full-coverage canvas core configuration layer
     canvas_result = st_canvas(
         fill_color="rgba(255, 255, 255, 0.0)",  
         stroke_width=stroke_width,
@@ -219,7 +217,7 @@ with canvas_col:
         height=500,
         width=1000,
         drawing_mode=drawing_mode,
-        display_toolbar=True, # Protected delete actions at the base of your layout
+        display_toolbar=True, 
         key=f"engine_board_{bg_color}",
     )
 
